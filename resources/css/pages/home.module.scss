@@ -1,0 +1,27 @@
+@use '../base/general' as *;
+
+.home-container {
+    margin: 0 auto;
+    padding: 0 24px;
+    padding-bottom: 32px;
+    max-width: 1400px;
+
+    @media (min-width: $bp-sm) {
+        padding: 0 40px;
+        padding-bottom: 38px;
+    }
+
+    @media (min-width: $bp-md) {
+        padding: 0 80px;
+        padding-bottom: 46px;
+    }
+
+    @media (min-width: $bp-lg) {
+        padding: 0 120px;
+        padding-bottom: 52px;
+
+        min-height: calc(100vh - 148px);
+    }
+}
+
+.hero {}

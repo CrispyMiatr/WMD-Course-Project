@@ -1,0 +1,15 @@
+import { AxiosInstance } from 'axios';
+import { route as ziggyRoute } from 'ziggy-js';
+
+declare global {
+    interface Window {
+        axios: AxiosInstance;
+    }
+    var route: typeof ziggyRoute;
+}
+
+// This is necessary for Vite to recognize the env/glob types
+interface ImportMeta {
+    readonly env: ImportMetaEnv;
+    readonly glob: any;
+}
