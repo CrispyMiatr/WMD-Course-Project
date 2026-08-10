@@ -1,0 +1,23 @@
+.map-container {
+    display: flex;
+    flex-direction: column;
+    /* Adjust the height calculation based on your actual header height */
+    height: calc(100vh - 60px);
+    width: 100%;
+}
+
+.map-section {
+    flex-grow: 1;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    /* Prevents Leaflet's internal z-indexing from bleeding over your UI */
+}
+
+/* 
+ * react-leaflet requires the container to have a specific height and width 
+ */
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+}

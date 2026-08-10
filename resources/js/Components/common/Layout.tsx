@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { Footer, Header } from '../layout';
+import { Footer, Header } from '~/Components';
 
 interface LayoutProps extends PropsWithChildren {
     hideFooter?: boolean;
