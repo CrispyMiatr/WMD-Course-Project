@@ -1,4 +1,6 @@
+import { SightingType } from "../sightingForm.types";
+
 export interface MapPageType {
     status?: string;
-    sightings: any[];
+    sightings: SightingType[];
 }
