@@ -1,8 +1,10 @@
+@use '../base/general' as *;
+
 .map-container {
     display: flex;
     flex-direction: column;
 
-    height: calc(100vh - 100px);
+    height: calc(100vh - 141px);
     width: 100%;
 }
 
@@ -25,8 +27,8 @@
 
 .sidebar {
     flex: 1;
-    background-color: #ffffff;
-    border-left: 1px solid #e5e7eb;
+    background-color: $clr-white;
+    border-left: 1px solid $clr-gray-50;
     overflow-y: auto;
     box-shadow: -4px 0 15px rgba(0, 0, 0, 0.05);
     z-index: 2;
@@ -38,7 +40,7 @@
         height: 100%;
         padding: 2rem;
         text-align: center;
-        color: #6b7280;
-        font-size: 1.1rem;
+        color: $clr-gray-600;
+        font-size: $fs-base;
     }
 }

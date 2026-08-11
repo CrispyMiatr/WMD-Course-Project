@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
 import { Layout } from '~/Components/common/Layout';
-import { SightingForm } from '~/Components';
+import { SightingDetails, SightingForm } from '~/Components';
 import type { MapPageType } from '~/types/pages/mapPage.types';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -12,6 +12,7 @@ import map from '~styles/pages/map.module.scss';
 // Fix for default Leaflet markers missing icons in React
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { SightingType } from '~/types';
 let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
@@ -20,9 +21,16 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const MapClickHandler = ({ onLocationSelect }: { onLocationSelect: (lat: number, lng: number) => void }) => {
+const MapClickHandler = ({
+    onLocationSelect,
+    clearSelection
+}: {
+    onLocationSelect: (lat: number, lng: number) => void;
+    clearSelection: () => void;
+}) => {
     useMapEvents({
         click(e) {
+            clearSelection(); // Deselect existing pin
             onLocationSelect(e.latlng.lat, e.latlng.lng);
         },
     });
@@ -32,6 +40,8 @@ const MapClickHandler = ({ onLocationSelect }: { onLocationSelect: (lat: number,
 const Map = ({ status, sightings }: MapPageType) => {
     const { auth } = usePage().props as any; // User login check
     const [newLocation, setNewLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const [selectedSighting, setSelectedSighting] = useState<SightingType | null>(null);
+
 
     return (
         <div className={map['map-container']}>
@@ -49,37 +59,57 @@ const Map = ({ status, sightings }: MapPageType) => {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
-                        {auth.user && <MapClickHandler onLocationSelect={(lat, lng) => setNewLocation({ lat, lng })} />}
+                        {auth.user && (
+                            <MapClickHandler
+                                onLocationSelect={(lat, lng) => setNewLocation({ lat, lng })}
+                                clearSelection={() => setSelectedSighting(null)}
+                            />
+                        )}
 
                         {sightings.map(sighting => (
-                            <Marker key={sighting.id} position={[sighting.latitude, sighting.longitude]}>
-                                <Popup>
+                            <Marker
+                                key={sighting.id}
+                                position={[sighting.latitude, sighting.longitude]}
+                                eventHandlers={{
+                                    click: () => {
+                                        setNewLocation(null); // Close 'new form' if open
+                                        setSelectedSighting(sighting); // Show details in sidebar
+                                    }
+                                }}
+                            >
+                                <Tooltip direction="top" offset={[0, -30]}>
                                     <strong>{sighting.type === 'person' ? 'Person' : sighting.details.entity_type}</strong>
                                     <p style={{ margin: '5px 0' }}>{sighting.short_description}</p>
-                                    <small>Logged by: {sighting.user?.name}</small>
-                                </Popup>
+                                </Tooltip>
                             </Marker>
                         ))}
 
                         {newLocation && (
                             <Marker position={[newLocation.lat, newLocation.lng]}>
-                                <Popup>New sighting location</Popup>
+                                <Tooltip permanent direction="top" offset={[0, -30]}>
+                                    New sighting location
+                                </Tooltip>
                             </Marker>
                         )}
                     </MapContainer>
                 </section>
 
                 <aside className={map['sidebar']}>
-                    {!auth.user ? (
-                        <div className={map['sidebar__message']}>
-                            <p>Please log in to register a sighting.</p>
-                        </div>
+                    {selectedSighting ? (
+                        <SightingDetails
+                            sighting={selectedSighting}
+                            onClose={() => setSelectedSighting(null)}
+                        />
                     ) : newLocation ? (
                         <SightingForm
                             lat={newLocation.lat}
                             lng={newLocation.lng}
                             onSuccess={() => setNewLocation(null)}
                         />
+                    ) : !auth.user ? (
+                        <div className={map['sidebar__message']}>
+                            <p>Please log in to register a sighting.</p>
+                        </div>
                     ) : (
                         <div className={map['sidebar__message']}>
                             <p>Click anywhere on the map to pin a suspicious sighting.</p>

@@ -1,0 +1,108 @@
+@use '~styles/base/general.scss' as *;
+
+.details-container {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    color: $txt-dark;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid $clr-gray-200;
+    padding-bottom: 0.75rem;
+
+    .title {
+        font-size: $fs-md;
+        color: $txt-black;
+        margin: 0;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: $fs-md;
+        cursor: pointer;
+        color: $clr-gray-500;
+        transition: color 0.2s;
+
+        &:hover {
+            color: $color-no;
+        }
+    }
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $fs-sm;
+
+    .tag {
+        background-color: $clr-yellow;
+        color: $txt-black;
+        padding: 0.25rem 0.75rem;
+        border-radius: $rad-full;
+        font-weight: $fw-semibold;
+        font-size: $fs-xs;
+    }
+
+    .date {
+        color: $txt-muted;
+    }
+}
+
+.section {
+    h4 {
+        font-size: $fs-sm;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $txt-muted;
+        margin-bottom: 0.5rem;
+    }
+
+    .description {
+        font-size: $fs-base;
+        line-height: 1.5;
+        background: $clr-gray-50;
+        padding: 1rem;
+        border-radius: $rad-xs;
+        border: 1px solid $clr-gray-100;
+    }
+
+    .details-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        li {
+            font-size: $fs-base;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed $clr-gray-200;
+            padding-bottom: 0.25rem;
+
+            strong {
+                color: $txt-black;
+            }
+        }
+    }
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.footer {
+    margin-top: auto;
+    text-align: right;
+    color: $clr-gray-500;
+    border-top: 1px solid $clr-gray-200;
+    padding-top: 1rem;
+}
