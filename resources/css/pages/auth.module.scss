@@ -1,0 +1,108 @@
+@use '~styles/base/general.scss' as *;
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    background-color: $bg-body;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    background: $bg-card;
+    padding: 2.5rem;
+    border-radius: $rad-md;
+    box-shadow: 0 10px 15px -3px $sh-card;
+    width: 100%;
+    max-width: 450px;
+
+    &__title {
+        font-size: $fs-lg;
+        color: $txt-black;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    &__subtitle {
+        color: $txt-muted;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: $fs-base;
+    }
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+
+    label {
+        display: block;
+        font-size: $fs-sm;
+        font-weight: $fw-medium;
+        color: $txt-dark;
+        margin-bottom: 0.5rem;
+    }
+
+    input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid $clr-gray-300;
+        border-radius: $rad-xs;
+        font-size: $fs-base;
+
+        &:focus {
+            outline: none;
+            border-color: $clr-yellow;
+            box-shadow: 0 0 0 2px rgba($clr-yellow, 0.2);
+        }
+    }
+}
+
+.error {
+    color: $color-no;
+    font-size: $fs-xs;
+    margin-top: 0.35rem;
+    display: block;
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: $clr-yellow;
+    color: $txt-black;
+    padding: 0.75rem;
+    border-radius: $rad-xs;
+    border: none;
+    font-weight: $fw-semibold;
+    font-size: $fs-base;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: darken($clr-yellow, 10%);
+    }
+
+    &:disabled {
+        opacity: 0.7;
+    }
+}
+
+.auth-links {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: $fs-sm;
+    color: $txt-muted;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    a {
+        color: $txt-black;
+        font-weight: $fw-semibold;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

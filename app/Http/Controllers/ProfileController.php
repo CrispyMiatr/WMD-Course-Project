@@ -18,9 +18,17 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
+        // Load user with sightings -> by newest
+        $user = $request->user()->load([
+            'sightings' => function ($query) {
+                $query->latest();
+            }
+        ]);
+
+        return Inertia::render('Profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'sightings' => $user->sightings,
         ]);
     }
 

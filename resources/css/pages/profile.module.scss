@@ -1,0 +1,128 @@
+@use '~styles/base/general.scss' as *;
+
+.profile-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+
+  @media (max-width: $bp-md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section {
+  background: $bg-card;
+  padding: 1.5rem;
+  border-radius: $rad-sm;
+  box-shadow: 0 4px 6px -1px $sh-card;
+  margin-bottom: 2rem;
+
+  &__header {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid $clr-gray-200;
+    padding-bottom: 0.5rem;
+
+    h2 {
+      font-size: $fs-md;
+      color: $txt-black;
+    }
+
+    p {
+      font-size: $fs-sm;
+      color: $txt-muted;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    font-size: $fs-sm;
+    font-weight: $fw-medium;
+    color: $txt-dark;
+    margin-bottom: 0.5rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid $clr-gray-300;
+    border-radius: $rad-xs;
+
+    &:focus {
+      outline: none;
+      border-color: $clr-yellow;
+      box-shadow: 0 0 0 2px rgba($clr-yellow, 0.2);
+    }
+  }
+
+  .error {
+    color: $color-no;
+    font-size: $fs-xs;
+    margin-top: 0.25rem;
+    display: block;
+  }
+}
+
+.btn-save {
+  background-color: $color-primary;
+  color: $txt-white;
+  padding: 0.5rem 1rem;
+  border-radius: $rad-xs;
+  border: none;
+  font-weight: $fw-medium;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $clr-gray-700;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.success-msg {
+  color: $color-yes;
+  font-size: $fs-sm;
+  margin-left: 1rem;
+}
+
+.mini-map-container {
+  height: 500px;
+  border-radius: $rad-sm;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border: 1px solid $clr-gray-200;
+}
+
+.log-list {
+  list-style: none;
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+
+  li {
+    padding: 0.75rem;
+    border-bottom: 1px solid $clr-gray-100;
+    display: flex;
+    justify-content: space-between;
+
+    .log-type {
+      font-weight: $fw-semibold;
+      color: $txt-black;
+      text-transform: capitalize;
+    }
+
+    .log-date {
+      font-size: $fs-xs;
+      color: $txt-muted;
+    }
+  }
+}

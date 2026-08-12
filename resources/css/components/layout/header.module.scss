@@ -1,8 +1,97 @@
 @use '~styles/base/general.scss' as *;
 
-.navbar {}
+.header-wrapper {
+    background-color: $bg-nav-dark;
+    color: $txt-white;
+    box-shadow: 0 4px 6px -1px $sh-card;
+    position: relative;
+    z-index: 50;
+}
 
-.logo {
-    width: 45px;
-    display: block;
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 60px;
+    }
+
+    &__left,
+    &__right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    &__logo-link {
+        font-size: $fs-base;
+        font-weight: $fw-bold;
+        color: $clr-yellow;
+        text-decoration: none;
+        margin-right: 1rem;
+    }
+
+    // &__logo {}
+
+    &__links {
+        display: flex;
+        gap: 1rem;
+    }
+}
+
+.nav-link {
+    color: $txt-light;
+    text-decoration: none;
+    font-size: $fs-base;
+    font-weight: $fw-medium;
+    transition: color 0.2s;
+    padding: 0.25rem 0;
+
+    &:hover {
+        color: $txt-white;
+    }
+
+    &.active {
+        color: $bg-nav-link;
+        border-bottom: 2px solid $bg-nav-link;
+    }
+}
+
+.nav-button-logout {
+    background: none;
+    border: none;
+    color: $clr-gray-500;
+    font-size: $fs-base;
+    font-weight: $fw-medium;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0;
+
+    &:hover {
+        color: $color-no;
+    }
+}
+
+.nav-button-primary {
+    background-color: $clr-yellow;
+    color: $txt-dark;
+    text-decoration: none;
+    padding: 0.4rem 1rem;
+    border-radius: $rad-xs;
+    font-weight: $fw-semibold;
+    font-size: $fs-base;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: darken($clr-yellow, 10%);
+    }
+}
+
+/* Implement hamburger menu later */
+.mobile-nav {
+    display: none;
 }

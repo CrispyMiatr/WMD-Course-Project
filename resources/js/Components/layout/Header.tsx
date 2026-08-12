@@ -1,37 +1,67 @@
 import { Link, usePage } from '@inertiajs/react';
-import header from '~styles/components/layout/header.module.scss'
-import logo from "~assets/logo_b.svg"
-import { NavButton } from '~/Components';
+import header from '~styles/components/layout/header.module.scss';
 
 export const Header = () => {
-    const { url } = usePage();
-
-    const isHomeActive = url === '/';
-    const isMapActive = url.startsWith('/map');
+    const { auth } = usePage().props as any;
+    const user = auth.user;
 
     return (
-        <>
+        <header className={header['header-wrapper']}>
             <nav className={header['navbar']}>
                 <div className={header['navbar__container']}>
-                    <p className={header['navbar__title']}>
-                        <Link href="/" className={header['logo-link']}>
-                            <img src={logo} alt="WatchLog" className={header['logo']} />
+
+                    <div className={header['navbar__left']}>
+                        <Link href={route('home')} className={header['navbar__logo-link']}>
+                            {/* <img src={logo} alt="WatchLog" className={header['navbar__logo']} /> */}
+                            WatchLog
                         </Link>
 
-                        <li className={header['links__link-item']}>
-                            <NavButton name="Home" link="/" isActive={isHomeActive} />
-                        </li>
+                        <div className={header['navbar__links']}>
+                            <Link
+                                href={route('home')}
+                                className={`${header['nav-link']} ${route().current('home') ? header['active'] : ''}`}
+                            >
+                                Home
+                            </Link>
+                            <Link
+                                href={route('map.index')}
+                                className={`${header['nav-link']} ${route().current('map.index') ? header['active'] : ''}`}
+                            >
+                                Map
+                            </Link>
+                            {/* TODO: general overview page */}
+                        </div>
+                    </div>
 
-                        <li className={header['links__link-item']}>
-                            <NavButton name="Map" link="/map" isActive={isMapActive} />
-                        </li>
-                    </p>
+                    <div className={header['navbar__right']}>
+                        {user ? (
+                            <>
+                                <Link
+                                    href={route('profile.edit')}
+                                    className={`${header['nav-link']} ${route().current('profile.edit') ? header['active'] : ''}`}
+                                >
+                                    {user.username || user.name}
+                                </Link>
+                                <Link
+                                    href={route('logout')}
+                                    method="post"
+                                    as="button"
+                                    type="button"
+                                    className={header['nav-button-logout']}
+                                >
+                                    Log Out
+                                </Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link href={route('login')} className={header['nav-link']}>
+                                    Log in
+                                </Link>
+                            </>
+                        )}
+                    </div>
                 </div>
             </nav>
-
-            <nav className={header['mobile-nav']}>
-
-            </nav>
-        </>
+        </header>
     );
 };
