@@ -27,6 +27,7 @@ export interface BaseSightingType {
     user_id: number;
     latitude: number;
     longitude: number;
+    location_name: string | null;
     short_description: string;
     created_at: string;
     user?: {

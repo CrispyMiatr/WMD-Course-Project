@@ -104,6 +104,24 @@
             font-size: $fs-xs;
         }
     }
+
+    &__badge-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+}
+
+.location-badge {
+    background-color: $clr-gray-50;
+    color: $txt-muted;
+    padding: 0.15rem 0.5rem;
+    border-radius: $rad-xs;
+    font-size: $fs-xs;
+    font-weight: $fw-semibold;
+    text-transform: uppercase;
+    border: 1px solid $clr-gray-100;
 }
 
 .pagination {

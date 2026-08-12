@@ -14,6 +14,7 @@ class Sighting extends Model
         'user_id',
         'latitude',
         'longitude',
+        'location_name',
         'type',
         'short_description',
         'details'

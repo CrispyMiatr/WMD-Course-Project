@@ -8,7 +8,7 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
     const [search, setSearch] = useState(filters.search || '');
     const [type, setType] = useState(filters.type || 'all');
 
-    // Handle searching with a small delay (optional) or via button
+    // Handle searching with a small delay or via button
     const handleFilter = () => {
         router.get(route('overview.index'), { search, type }, {
             preserveState: true,
@@ -20,7 +20,6 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
         <div className={styles['overview-container']}>
             <Head title="Neighborhood Overview" />
 
-            {/* Statistics Section */}
             <div className={styles['stats-grid']}>
                 <div className={styles['stat-card']}>
                     <span className={styles['stat-card__value']}>{stats.total}</span>
@@ -36,7 +35,6 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                 </div>
             </div>
 
-            {/* Filter Bar */}
             <div className={styles['filter-bar']}>
                 <input
                     type="text"
@@ -52,7 +50,6 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                 <button onClick={handleFilter} className="nav-button-primary">Apply</button>
             </div>
 
-            {/* Feed Section */}
             <div className={styles['feed']}>
                 {sightings.data.length === 0 ? (
                     <p>No sightings found in this neighborhood.</p>
@@ -60,7 +57,10 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                     sightings.data.map(s => (
                         <div key={s.id} className={`${styles['sighting-card']} ${s.type === 'person' ? styles['sighting-card--person'] : ''}`}>
                             <div className={styles['sighting-card__info']}>
-                                <h3>{s.type === 'person' ? 'Person Spotted' : (s.details as any).entity_type}</h3>
+                                <div className={styles['sighting-card__badge-row']}>
+                                    <h3>{s.type === 'person' ? 'Person' : (s.details as any).entity_type}</h3>
+                                    <span className={styles['location-badge']}>{s.location_name || 'Area Unknown'}</span>
+                                </div>
                                 <p>{s.short_description}</p>
                                 <small>
                                     Reported by {s.user?.username || s.user?.name} • {
@@ -78,7 +78,6 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                 )}
             </div>
 
-            {/* Simple Pagination */}
             <div className={styles['pagination']}>
                 {sightings.links.map((link, i) => (
                     <Link
