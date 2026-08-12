@@ -29,7 +29,11 @@ export interface BaseSightingType {
     longitude: number;
     short_description: string;
     created_at: string;
-    user?: { id: number; name: string };
+    user?: {
+        id: number;
+        name: string;
+        username: string | null;
+    };
 }
 
 // Person

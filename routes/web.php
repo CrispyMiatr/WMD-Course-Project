@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SightingController;
+use App\Http\Controllers\OverviewController;
 
 use \Illuminate\Support\Facades\Auth;
 
@@ -28,6 +29,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Map
 Route::get('/map', [MapController::class, 'index'])->name('map.index');
+
+// Overview
+Route::get('/overview', [OverviewController::class, 'index'])->name('overview.index');
 
 // Auth
 Route::middleware('auth')->group(function () {

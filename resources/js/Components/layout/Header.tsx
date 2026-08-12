@@ -29,7 +29,12 @@ export const Header = () => {
                             >
                                 Map
                             </Link>
-                            {/* TODO: general overview page */}
+                            <Link
+                                href={route('overview.index')}
+                                className={`${header['nav-link']} ${route().current('overview.index') ? header['active'] : ''}`}
+                            >
+                                Overview
+                            </Link>
                         </div>
                     </div>
 
