@@ -151,3 +151,63 @@
         }
     }
 }
+
+.threat-banner {
+    padding: 1.5rem;
+    border-radius: $rad-md;
+    margin-bottom: 2rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+
+    &--success {
+        background: rgba($color-yes, 0.1);
+        border-color: $color-yes;
+        color: darken($color-yes, 20%);
+    }
+
+    &--warning {
+        background: rgba($clr-yellow, 0.1);
+        border-color: $clr-yellow;
+        color: darken($clr-yellow, 25%);
+    }
+
+    &--danger {
+        background: rgba($color-no, 0.1);
+        border-color: $color-no;
+        color: darken($color-no, 20%);
+        animation: pulse 2s infinite;
+    }
+
+    &__content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 0.5rem;
+    }
+
+    &__label {
+        font-size: $fs-sm;
+        font-weight: $fw-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__value {
+        font-size: $fs-lg;
+        font-family: $ff-title;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba($color-no, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba($color-no, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba($color-no, 0);
+    }
+}

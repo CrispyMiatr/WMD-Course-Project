@@ -16,9 +16,22 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
         });
     };
 
+    const bannerClass = stats.uiTheme ? styles[`threat-banner--${stats.uiTheme}`] : '';
+
     return (
         <div className={styles['overview-container']}>
             <Head title="Neighborhood Overview" />
+
+            <div className={`${styles['threat-banner']} ${bannerClass}`}>
+                <div className={styles['threat-banner__content']}>
+                    <span className={styles['threat-banner__label']}>Neighborhood Security Status:</span>
+                    <strong className={styles['threat-banner__value']}>{stats.threatLevel}</strong>
+                </div>
+                <p className={styles['threat-banner__desc']}>
+                    {stats.recent} incidents reported in the last 48 hours.
+                    {stats.threatLevel === 'Critical' ? ' Exercise extreme caution.' : ' Stay vigilant.'}
+                </p>
+            </div>
 
             <div className={styles['stats-grid']}>
                 <div className={styles['stat-card']}>

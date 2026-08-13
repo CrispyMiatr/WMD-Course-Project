@@ -12,6 +12,9 @@ export interface OverviewPageType {
         total: number;
         people: number;
         objects: number;
+        recent: number;
+        threatLevel: string;
+        uiTheme: string;
     };
     filters: {
         search?: string;
