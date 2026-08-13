@@ -2,17 +2,15 @@ import { useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvents, Tooltip } from 'react-leaflet';
 import { Layout } from '~/Components/common/Layout';
-import { SightingDetails, SightingForm } from '~/Components';
+import { HeatmapLayer, SightingDetails, SightingForm } from '~/Components';
 import type { MapPageType } from '~/types/pages/mapPage.types';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-
-import map from '~styles/pages/map.module.scss';
-
-// Fix for default Leaflet markers missing icons in React
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { SightingType } from '~/types';
+import map from '~styles/pages/map.module.scss';
+
 let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
@@ -30,7 +28,7 @@ const MapClickHandler = ({
 }) => {
     useMapEvents({
         click(e) {
-            clearSelection(); // Deselect existing pin
+            clearSelection();
             onLocationSelect(e.latlng.lat, e.latlng.lng);
         },
     });
@@ -38,7 +36,7 @@ const MapClickHandler = ({
 };
 
 const Map = ({ status, sightings, recentTracks }: MapPageType) => {
-    const { auth } = usePage().props as any; // User login check
+    const { auth } = usePage().props as any;
     const [newLocation, setNewLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [selectedSighting, setSelectedSighting] = useState<SightingType | null>(null);
 
@@ -66,6 +64,8 @@ const Map = ({ status, sightings, recentTracks }: MapPageType) => {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
+
+                        <HeatmapLayer sightings={sightings} />
 
                         {auth.user && (
                             <MapClickHandler
@@ -95,8 +95,8 @@ const Map = ({ status, sightings, recentTracks }: MapPageType) => {
                                 position={[sighting.latitude, sighting.longitude]}
                                 eventHandlers={{
                                     click: () => {
-                                        setNewLocation(null); // Close 'new form' if open
-                                        setSelectedSighting(sighting); // Show details in sidebar
+                                        setNewLocation(null);
+                                        setSelectedSighting(sighting);
                                     }
                                 }}
                             >

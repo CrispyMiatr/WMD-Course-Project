@@ -16,7 +16,8 @@ class MapController extends Controller
             ->whereNotNull('track_id')
             ->orderBy('created_at', 'desc')
             ->get()
-            ->unique('track_id');
+            ->unique('track_id')
+            ->values();
 
         return Inertia::render('Map', [
             'sightings' => $sightings,
