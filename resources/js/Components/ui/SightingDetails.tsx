@@ -21,6 +21,10 @@ export const SightingDetails = ({ sighting, onClose }: SightingDetailsType) => {
                 <span className={detail['date']}>{formattedDate}</span>
             </div>
 
+            {sighting.track_id && (
+                <span className={detail['track-badge']}>Part of a movement trail</span>
+            )}
+
             <div className={detail['section']}>
                 <h4>Description</h4>
                 <p className={detail['description']}>{sighting.short_description}</p>

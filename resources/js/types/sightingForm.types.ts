@@ -1,6 +1,7 @@
 export interface SightingFormType {
     lat: number;
     lng: number;
+    recentTracks: SightingType[];
     onSuccess: () => void;
 }
 
@@ -29,6 +30,7 @@ export interface BaseSightingType {
     longitude: number;
     location_name: string | null;
     short_description: string;
+    track_id: string | null;
     created_at: string;
     user?: {
         id: number;

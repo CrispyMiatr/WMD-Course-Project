@@ -6,6 +6,7 @@ use App\Models\Sighting;
 use App\Http\Requests\StoreSightingRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class SightingController extends Controller
 {
@@ -35,6 +36,8 @@ class SightingController extends Controller
             // Fallback if API is down
         }
 
+        $trackId = $request->track_id ?: (string) Str::uuid();
+
         Sighting::create([
             'user_id' => auth()->id(),
             'latitude' => $request->latitude,
@@ -43,6 +46,7 @@ class SightingController extends Controller
             'type' => $request->type,
             'short_description' => $request->short_description,
             'details' => $request->details,
+            'track_id' => $trackId,
         ]);
 
         return redirect()->back();

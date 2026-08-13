@@ -55,6 +55,14 @@
     }
 }
 
+.track-badge {
+    background-color: $clr-gray-100;
+    color: $txt-black;
+    padding: 0.25rem 0.75rem;
+    border-radius: $rad-sm;
+    font-size: $fs-sm;
+}
+
 .section {
     h4 {
         font-size: $fs-sm;

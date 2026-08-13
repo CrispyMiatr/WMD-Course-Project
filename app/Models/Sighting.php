@@ -17,7 +17,8 @@ class Sighting extends Model
         'location_name',
         'type',
         'short_description',
-        'details'
+        'details',
+        'track_id',
     ];
 
     protected function casts(): array

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, useMapEvents, Tooltip } from 'react-leaflet';
 import { Layout } from '~/Components/common/Layout';
 import { SightingDetails, SightingForm } from '~/Components';
 import type { MapPageType } from '~/types/pages/mapPage.types';
@@ -37,11 +37,19 @@ const MapClickHandler = ({
     return null;
 };
 
-const Map = ({ status, sightings }: MapPageType) => {
+const Map = ({ status, sightings, recentTracks }: MapPageType) => {
     const { auth } = usePage().props as any; // User login check
     const [newLocation, setNewLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [selectedSighting, setSelectedSighting] = useState<SightingType | null>(null);
 
+    const trajectories = sightings
+        .filter(s => s.track_id !== null)
+        .reduce((acc, sighting) => {
+            const id = sighting.track_id!;
+            if (!acc[id]) acc[id] = [];
+            acc[id].push(sighting);
+            return acc;
+        }, {} as Record<string, SightingType[]>);
 
     return (
         <div className={map['map-container']}>
@@ -65,6 +73,21 @@ const Map = ({ status, sightings }: MapPageType) => {
                                 clearSelection={() => setSelectedSighting(null)}
                             />
                         )}
+
+                        {Object.entries(trajectories).map(([trackId, points]) => {
+                            const sortedPoints = points.sort((a, b) =>
+                                new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                            );
+                            const latLngs = sortedPoints.map(p => [p.latitude, p.longitude] as [number, number]);
+
+                            return (
+                                <Polyline
+                                    key={trackId}
+                                    positions={latLngs}
+                                    pathOptions={{ color: '#008cff', weight: 4, dashArray: '10, 10', opacity: 0.6 }}
+                                />
+                            );
+                        })}
 
                         {sightings.map(sighting => (
                             <Marker
@@ -104,6 +127,7 @@ const Map = ({ status, sightings }: MapPageType) => {
                         <SightingForm
                             lat={newLocation.lat}
                             lng={newLocation.lng}
+                            recentTracks={recentTracks}
                             onSuccess={() => setNewLocation(null)}
                         />
                     ) : !auth.user ? (

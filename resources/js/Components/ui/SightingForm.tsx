@@ -1,20 +1,19 @@
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, useEffect } from 'react';
-import { SightingFormType } from '~/types';
+import { SightingFormType, SightingType } from '~/types';
 import form from '~styles/components/ui/sightingForm.module.scss';
 
-export const SightingForm = ({ lat, lng, onSuccess }: SightingFormType) => {
+export const SightingForm = ({ lat, lng, recentTracks, onSuccess }: SightingFormType) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         latitude: lat,
         longitude: lng,
-        type: 'person',
+        type: 'person' as 'person' | 'other',
         short_description: '',
         details: {
-            // Person defaults
             hair_color: '', headwear: '', shirt: '', pants: '', shoes: '', height: '',
-            // Other defaults
             entity_type: 'car', general_color: '', accent_colors: ''
-        }
+        } as any,
+        track_id: '',
     });
 
     // Update form state if map pin moves
@@ -36,9 +35,58 @@ export const SightingForm = ({ lat, lng, onSuccess }: SightingFormType) => {
         setData('details', { ...data.details, [key]: value });
     };
 
+    const handleTrackSelect = (track: SightingType) => {
+        // This Regex looks for "Sighting #[number]: " at the start
+        const match = track.short_description.match(/^Sighting #(\d+): /);
+        const cleanDescription = track.short_description.replace(/^Sighting #(\d+): /, '');
+
+        // Increment the number if found, otherwise start at 2
+        const nextCount = match ? parseInt(match[1]) + 1 : 2;
+
+        setData(d => ({
+            ...d,
+            track_id: track.track_id || '',
+            type: track.type,
+            details: { ...track.details },
+            short_description: `Sighting #${nextCount}: ${cleanDescription}`
+        }));
+    };
+
     return (
         <form onSubmit={submit} className={form['form']}>
             <h3 className={form['form__title']}>Log a Sighting</h3>
+
+            <div className={form['form__group']}>
+                <label>Is this a continuation of an existing sighting?</label>
+                <div style={{ display: 'flex', gap: '5px' }}>
+                    <select
+                        style={{ flex: 1 }}
+                        value={data.track_id}
+                        onChange={(e) => {
+                            const track = recentTracks.find(t => t.track_id === e.target.value);
+                            if (track) handleTrackSelect(track);
+                        }}
+                    >
+                        <option value="">-- No, this is a new subject --</option>
+                        {recentTracks.map(t => (
+                            <option key={t.id} value={t.track_id!}>
+                                {t.type.toUpperCase()}: {t.short_description} ({t.location_name})
+                            </option>
+                        ))}
+                    </select>
+                    {data.track_id && (
+                        <button
+                            type="button"
+                            onClick={() => setData('track_id', '')}
+                            className={form['btn-secondary']}
+                        >
+                            Reset
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            <hr style={{ margin: '0.25rem 0', border: '0', borderTop: '1px solid #eee' }} />
 
             <div className={form['form__group']}>
                 <label>Type of Sighting</label>
