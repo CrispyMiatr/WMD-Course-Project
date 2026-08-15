@@ -1,12 +1,25 @@
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { Layout } from '~/Components';
 import type { ProfilePageType } from '~/types';
 import styles from '~styles/pages/profile.module.scss';
 import 'leaflet/dist/leaflet.css';
 
-const Profile = ({ auth, status, sightings }: ProfilePageType) => {
+const MapClickHandler = ({
+    onLocationSelect,
+}: {
+    onLocationSelect: (lat: number, lng: number) => void;
+}) => {
+    useMapEvents({
+        click(e) {
+            onLocationSelect(e.latlng.lat, e.latlng.lng);
+        },
+    });
+    return null;
+};
+
+const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
     const user = auth.user;
 
     // Profile info
@@ -14,6 +27,9 @@ const Profile = ({ auth, status, sightings }: ProfilePageType) => {
         name: user.name,
         username: user.username || '',
         email: user.email,
+        home_latitude: user.home_latitude ?? null,
+        home_longitude: user.home_longitude ?? null,
+        radius_km: user.radius_km ?? 5,
     });
 
     const submitProfile: FormEventHandler = (e) => {
@@ -36,11 +52,49 @@ const Profile = ({ auth, status, sightings }: ProfilePageType) => {
         });
     };
 
+    const bannerClass = stats?.uiTheme ? styles[`threat-banner--${stats.uiTheme}`] : '';
+
     return (
         <div className={styles['profile-container']}>
             <Head title="Profile" />
 
             <div className={styles['left-col']}>
+                <section className={styles['section']}>
+                    <div className={styles['section__header']}>
+                        <h2>Home Location & Safety Radius</h2>
+                        <p>Set your home to receive personalized neighborhood security alerts.</p>
+                    </div>
+
+                    <div className={styles['mini-map-container']} style={{ height: '200px' }}>
+                        <MapContainer
+                            center={[50.8422, 4.3227]}
+                            zoom={13}
+                            style={{ height: '100%' }}
+                        >
+                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                            <MapClickHandler
+                                onLocationSelect={(lat, lng) => {
+                                    profileForm.setData(d => ({ ...d, home_latitude: lat, home_longitude: lng }));
+                                }}
+                            />
+                            {profileForm.data.home_latitude !== null && profileForm.data.home_longitude !== null && (
+                                <Marker position={[profileForm.data.home_latitude as number, profileForm.data.home_longitude as number]} />
+                            )}
+                        </MapContainer>
+                    </div>
+
+                    <div className={styles['form-group']}>
+                        <label>Safety Radius (km): {profileForm.data.radius_km}km</label>
+                        <input
+                            type="range" min="1" max="20"
+                            value={profileForm.data.radius_km}
+                            onChange={e => profileForm.setData('radius_km', parseInt(e.target.value))}
+                        />
+                    </div>
+
+                    <button onClick={submitProfile} className={styles['btn-save']}>Update Preferences</button>
+                </section>
+
                 <section className={styles['section']}>
                     <div className={styles['section__header']}>
                         <h2>Profile Information</h2>
@@ -106,6 +160,22 @@ const Profile = ({ auth, status, sightings }: ProfilePageType) => {
             </div>
 
             <div className={styles['right-col']}>
+                {stats ? (
+                    <div className={`${styles['threat-banner']} ${bannerClass}`}>
+                        <div className={styles['threat-banner__content']}>
+                            <span className={styles['threat-banner__label']}>Local Security Status:</span>
+                            <strong className={styles['threat-banner__value']}>{stats.threatLevel}</strong>
+                        </div>
+                        <p className={styles['threat-banner__desc']}>
+                            {stats.recent} incidents near your home ({stats.radius}km) in the last 48h.
+                        </p>
+                    </div>
+                ) : (
+                    <div className={styles['status-placeholder']}>
+                        Set your home location to see local security alerts.
+                    </div>
+                )}
+
                 <section className={styles['section']}>
                     <div className={styles['section__header']}>
                         <h2>Your Logs</h2>

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'username', 'email', 'password'])]
+#[Fillable(['name', 'username', 'email', 'password', 'home_latitude', 'home_longitude', 'radius_km'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -27,11 +27,60 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'home_latitude' => 'float',
+            'home_longitude' => 'float',
+            'radius_km' => 'integer',
         ];
     }
 
     public function sightings()
     {
         return $this->hasMany(Sighting::class);
+    }
+
+    public function getNeighborhoodStats()
+    {
+        if (!$this->home_latitude || !$this->home_longitude) {
+            return null;
+        }
+
+        $latitude = $this->home_latitude;
+        $longitude = $this->home_longitude;
+        $radius = $this->radius_km;
+
+        // Haversine formula
+        $formula = "( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) )";
+
+        /**
+         * Spatial haversine query
+         * Finds sightings within the user's specific radius
+         */
+        $count = Sighting::where('created_at', '>=', now()->subHours(48))
+            ->whereRaw("$formula <= ?", [
+                $latitude,
+                $longitude,
+                $latitude,
+                $radius
+            ])
+            ->count();
+
+        // Determine status based on local proximity
+        $level = 'Low';
+        $theme = 'success';
+
+        if ($count > 8) {
+            $level = 'Critical';
+            $theme = 'danger';
+        } elseif ($count > 2) {
+            $level = 'Elevated';
+            $theme = 'warning';
+        }
+
+        return [
+            'recent' => $count,
+            'threatLevel' => $level,
+            'uiTheme' => $theme,
+            'radius' => $radius
+        ];
     }
 }

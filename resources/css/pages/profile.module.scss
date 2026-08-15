@@ -126,3 +126,7 @@
     }
   }
 }
+
+.threat-banner {
+  @include threat-banner;
+}

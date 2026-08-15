@@ -15,6 +15,7 @@ export interface OverviewPageType {
         recent: number;
         threatLevel: string;
         uiTheme: string;
+        radius: number;
     };
     filters: {
         search?: string;

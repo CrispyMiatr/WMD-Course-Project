@@ -28,7 +28,7 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                     <strong className={styles['threat-banner__value']}>{stats.threatLevel}</strong>
                 </div>
                 <p className={styles['threat-banner__desc']}>
-                    {stats.recent} incidents reported in the last 48 hours.
+                    {stats.recent} incidents near your home ({stats.radius}km) in the last 48h.
                     {stats.threatLevel === 'Critical' ? ' Exercise extreme caution.' : ' Stay vigilant.'}
                 </p>
             </div>

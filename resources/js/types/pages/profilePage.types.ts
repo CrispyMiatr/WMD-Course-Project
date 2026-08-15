@@ -8,4 +8,10 @@ export interface ProfilePageType {
     mustVerifyEmail: boolean;
     status?: string;
     sightings: SightingType[];
+    stats: {
+        recent: number;
+        threatLevel: string;
+        uiTheme: string;
+        radius: number;
+    } | null;
 }

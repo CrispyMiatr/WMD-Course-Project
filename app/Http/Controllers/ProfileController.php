@@ -29,6 +29,7 @@ class ProfileController extends Controller
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
             'sightings' => $user->sightings,
+            'stats' => $user->getNeighborhoodStats(),
         ]);
     }
 
@@ -37,12 +38,14 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'home_latitude' => ['nullable', 'numeric'],
+            'home_longitude' => ['nullable', 'numeric'],
+            'radius_km' => ['nullable', 'integer', 'min:1', 'max:50'],
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
+        $request->user()->fill($request->all());
         $request->user()->save();
 
         return Redirect::route('profile.edit');
