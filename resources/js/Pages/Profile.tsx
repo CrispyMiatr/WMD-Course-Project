@@ -61,7 +61,7 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
             <div className={styles['left-col']}>
                 <section className={styles['section']}>
                     <div className={styles['section__header']}>
-                        <h2>Home Location & Safety Radius</h2>
+                        <h3>Home Location & Safety Radius</h3>
                         <p>Set your home to receive personalized neighborhood security alerts.</p>
                     </div>
 
@@ -97,7 +97,7 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
 
                 <section className={styles['section']}>
                     <div className={styles['section__header']}>
-                        <h2>Profile Information</h2>
+                        <h3>Profile Information</h3>
                         <p>Update your account's profile information, username, and email address.</p>
                     </div>
 
@@ -129,7 +129,7 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
 
                 <section className={styles['section']}>
                     <div className={styles['section__header']}>
-                        <h2>Update Password</h2>
+                        <h3>Update Password</h3>
                         <p>Ensure your account is using a long, random password to stay secure.</p>
                     </div>
 
@@ -178,7 +178,7 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
 
                 <section className={styles['section']}>
                     <div className={styles['section__header']}>
-                        <h2>Your Logs</h2>
+                        <h3>Your Logs</h3>
                         <p>An overview of all the suspicious activities you have reported.</p>
                     </div>
 

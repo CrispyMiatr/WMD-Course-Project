@@ -36,11 +36,11 @@ export const SightingForm = ({ lat, lng, recentTracks, onSuccess }: SightingForm
     };
 
     const handleTrackSelect = (track: SightingType) => {
-        // This Regex looks for "Sighting #[number]: " at the start
+        // Looks for "Sighting #[number]: " at start
         const match = track.short_description.match(/^Sighting #(\d+): /);
         const cleanDescription = track.short_description.replace(/^Sighting #(\d+): /, '');
 
-        // Increment the number if found, otherwise start at 2
+        // Increment number if found, otherwise start at 2
         const nextCount = match ? parseInt(match[1]) + 1 : 2;
 
         setData(d => ({
@@ -58,7 +58,7 @@ export const SightingForm = ({ lat, lng, recentTracks, onSuccess }: SightingForm
 
             <div className={form['form__group']}>
                 <label>Is this a continuation of an existing sighting?</label>
-                <div style={{ display: 'flex', gap: '5px' }}>
+                <div className={form['flex-row']}>
                     <select
                         style={{ flex: 1 }}
                         value={data.track_id}

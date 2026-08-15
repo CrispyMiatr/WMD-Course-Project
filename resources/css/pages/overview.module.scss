@@ -1,9 +1,10 @@
 @use '~styles/base/general.scss' as *;
 
 .overview-container {
-    max-width: 1000px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 32px 120px;
+    max-width: 1200px;
+    min-height: calc(100vh - 60px);
 }
 
 .stats-grid {
@@ -86,13 +87,6 @@
     }
 
     &__info {
-        h3 {
-            font-size: $fs-md;
-            font-family: $ff-title;
-            margin: 0;
-            color: $txt-black;
-        }
-
         p {
             color: $txt-dark;
             margin: 0.25rem 0;
