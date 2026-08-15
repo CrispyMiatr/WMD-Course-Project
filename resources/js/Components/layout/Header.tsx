@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import header from '~styles/components/layout/header.module.scss';
+import logo from '~assets/logo.svg'
 
 export const Header = () => {
     const { auth } = usePage().props as any;
@@ -12,8 +13,8 @@ export const Header = () => {
 
                     <div className={header['navbar__left']}>
                         <Link href={route('home')} className={header['navbar__logo-link']}>
-                            {/* <img src={logo} alt="WatchLog" className={header['navbar__logo']} /> */}
-                            WatchLog
+                            <img src={logo} alt="WatchLog logo" className={header['navbar__logo']} />
+                            <h3>WatchLog</h3>
                         </Link>
 
                         <div className={header['navbar__links']}>
@@ -45,7 +46,7 @@ export const Header = () => {
                                     href={route('profile.edit')}
                                     className={`${header['nav-link']} ${route().current('profile.edit') ? header['active'] : ''}`}
                                 >
-                                    {user.username || user.name}
+                                    {user.username || user.name}'s profile
                                 </Link>
                                 <Link
                                     href={route('logout')}

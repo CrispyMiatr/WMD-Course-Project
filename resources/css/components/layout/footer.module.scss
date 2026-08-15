@@ -1,3 +1,68 @@
 @use '~styles/base/general.scss' as *;
 
-.footer {}
+.footer {
+    background-color: $bg-nav-dark;
+    color: $txt-white;
+    padding: 2.5rem 0;
+    border-top: 1px solid rgba($clr-white, 0.1);
+    margin-top: auto;
+
+    &__container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @media (max-width: $bp-sm) {
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+        }
+    }
+
+    &__left {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__logo-link {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+
+        h3 {
+            color: $clr-yellow;
+        }
+    }
+
+    &__text {
+        font-size: $fs-sm;
+        color: $txt-muted;
+    }
+
+    &__nav {
+        display: flex;
+        gap: 2rem;
+    }
+}
+
+.nav-link {
+    color: $txt-light;
+    text-decoration: none;
+    font-size: $fs-sm;
+    font-weight: $fw-medium;
+    transition: color 0.2s;
+    padding: 0.25rem 0;
+
+    &:hover {
+        color: $txt-white;
+    }
+
+    &.active {
+        color: $bg-nav-link;
+        border-bottom: 2px solid $bg-nav-link;
+    }
+}

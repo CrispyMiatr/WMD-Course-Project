@@ -28,14 +28,15 @@
     }
 
     &__logo-link {
-        font-size: $fs-base;
-        font-weight: $fw-bold;
-        color: $clr-yellow;
-        text-decoration: none;
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
         margin-right: 1rem;
-    }
 
-    // &__logo {}
+        h3 {
+            color: $clr-yellow;
+        }
+    }
 
     &__links {
         display: flex;
