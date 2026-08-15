@@ -119,8 +119,6 @@ body {
 
   background-color: $bg-body;
 
-  padding-bottom: 49px; // height of bottom nav bar
-
   @media (min-width: $bp-lg) {
     padding-bottom: 0;
   }
@@ -149,7 +147,7 @@ h1 {
 }
 
 h2 {
-  color: $txt-white;
+  color: $txt-black;
   font-size: $fs-md;
   font-family: $ff-title;
   font-weight: $fw-regular;
@@ -206,104 +204,6 @@ p {
 
 
 // --------== MIXINS ==--------
-@mixin label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
-  color: $txt-muted;
-  font-size: $fs-sm;
-  font-weight: $fw-regular;
-}
-
-@mixin input-field {
-  padding: 0.625rem 1rem;
-
-  color: $txt-black;
-  font-size: $fs-base;
-  font-family: $ff-main;
-
-  background-color: $clr-white;
-  border: 1px solid $clr-gray-300;
-  border-radius: $rad-sm;
-
-  transition: all 0.2s ease-in-out;
-
-  &:focus {
-    outline: none;
-    border-color: $color-accent;
-    box-shadow: 0 0 0 3px rgba($color-accent, 0.2);
-  }
-}
-
-@mixin checkbox {
-  label {
-    color: $txt-black;
-    font-weight: $fw-regular;
-    cursor: pointer;
-
-    input[type="checkbox"] {
-      accent-color: $color-primary;
-      width: 1rem;
-      height: 1rem;
-      border-radius: $rad-xs;
-    }
-  }
-}
-
-@mixin button {
-  width: 100%;
-  background-color: $color-accent;
-  border: 1px solid $clr-gray-900;
-  color: $txt-black;
-  font-family: $ff-title;
-
-  transition: all 0.1s ease-in-out;
-
-  @media (min-width: $bp-lg) {
-    &:hover:not(:disabled) {
-      background-color: $clr-gray-800;
-      color: $txt-white;
-    }
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  &.active {
-    background-color: $color-primary;
-    color: $clr-white;
-    border-color: $color-primary;
-  }
-
-  &:disabled {
-    background-color: $clr-gray-300;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-}
-
-@mixin btn-small {
-  @include button;
-
-  padding-top: 0.25rem;
-  padding-bottom: 0.05rem;
-
-  font-size: $fs-xs;
-  border-radius: $rad-sm;
-}
-
-@mixin btn {
-  @include button;
-
-  padding-top: 0.5rem;
-  padding-bottom: 0.3rem;
-
-  font-size: $fs-sm;
-  border-radius: $rad-sm;
-}
-
 @mixin threat-banner {
   padding: 1.5rem;
   border-radius: $rad-md;

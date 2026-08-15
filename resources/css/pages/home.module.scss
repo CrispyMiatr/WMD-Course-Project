@@ -2,24 +2,133 @@
 
 .home-container {
     margin: 0 auto;
-    padding: 0 24px;
-    padding-bottom: 32px;
+    padding: 0 120px;
     max-width: 1400px;
+    min-height: calc(100vh - 60px);
+}
 
-    @media (min-width: $bp-sm) {
-        padding: 0 40px;
-        padding-bottom: 38px;
+.hero {
+    padding: 13rem 0 5rem 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    &__text {
+        max-width: 700px;
+
+        &__title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1.25rem;
+
+            .logo {
+                width: 60px;
+                height: auto;
+            }
+
+            .title {
+                font-size: $fs-2xl;
+                font-family: $ff-title;
+                color: $txt-black;
+                margin: 0;
+            }
+        }
+
+        &__subtitle {
+            font-size: $fs-lg;
+            font-family: $ff-title;
+            color: $txt-dark;
+            margin-bottom: 1rem;
+        }
+
+        &__description {
+            font-size: $fs-base;
+            color: $txt-muted;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
     }
 
-    @media (min-width: $bp-md) {
-        padding: 0 80px;
-        padding-bottom: 46px;
+    &__cta {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+}
+
+.btn-primary {
+    background-color: $clr-yellow;
+    color: $txt-black;
+    padding: 0.75rem 2rem;
+    border-radius: $rad-sm;
+    font-family: $ff-title;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: darken($clr-yellow, 10%);
+        transform: translateY(-2px);
+    }
+}
+
+.btn-secondary {
+    background-color: $color-primary;
+    color: $txt-white;
+    padding: 0.75rem 2rem;
+    border-radius: $rad-sm;
+    font-family: $ff-title;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+}
+
+.features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 2.5rem;
+
+    @media (max-width: $bp-md) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.feature-card {
+    background: $bg-card;
+    padding: 2.5rem;
+    border-radius: $rad-lg;
+    border: 1px solid $clr-gray-100;
+    box-shadow: 0 4px 6px -1px $sh-card;
+
+    p {
+        color: $clr-gray-700;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
     }
 
-    @media (min-width: $bp-lg) {
-        padding: 0 120px;
-        padding-bottom: 52px;
+    .card-link {
+        background-color: $clr-yellow;
+        color: $txt-black;
+        padding: 0.75rem 2rem;
+        border-radius: $rad-sm;
+        font-family: $ff-title;
+        text-decoration: none;
+        transition: all 0.2s ease-in-out;
+        border: none;
+        cursor: pointer;
 
-        min-height: calc(100vh - 148px);
+        &:hover {
+            background-color: darken($clr-yellow, 10%);
+        }
     }
 }
