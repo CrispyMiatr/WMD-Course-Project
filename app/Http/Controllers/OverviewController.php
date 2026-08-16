@@ -75,10 +75,29 @@ class OverviewController extends Controller
             ];
         }
 
+        $insights = \DB::table('sightings')
+            ->join('users', 'sightings.user_id', '=', 'users.id')
+            ->select([
+                \DB::raw("CASE 
+                WHEN (2024 - users.birth_year) < 20 THEN 'Under 20'
+                WHEN (2024 - users.birth_year) BETWEEN 20 AND 35 THEN '20-35'
+                WHEN (2024 - users.birth_year) BETWEEN 36 AND 55 THEN '36-55'
+                ELSE '55+'
+            END as age_group"),
+                'sightings.type',
+                \DB::raw('count(*) as count')
+            ])
+            ->whereNotNull('users.birth_year')
+            ->groupBy('age_group', 'sightings.type')
+            ->orderBy('count', 'desc')
+            ->get()
+            ->groupBy('age_group');
+
         return Inertia::render('Overview', [
             'sightings' => $query->latest()->paginate(10)->withQueryString(),
             'stats' => $stats,
             'filters' => $request->only(['search', 'type']),
+            'insights' => $insights
         ]);
     }
 }

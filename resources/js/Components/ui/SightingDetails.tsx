@@ -1,4 +1,4 @@
-import { SightingDetailsType } from '~/types';
+import { isPersonSighting, SightingDetailsType } from '~/types';
 import detail from '~styles/components/ui/sightingDetails.module.scss';
 
 export const SightingDetails = ({ sighting, onClose }: SightingDetailsType) => {
@@ -7,17 +7,21 @@ export const SightingDetails = ({ sighting, onClose }: SightingDetailsType) => {
         timeStyle: 'short',
     });
 
+    const isPerson = isPersonSighting(sighting);
+
     return (
         <div className={detail['details-container']}>
             <div className={detail['header']}>
                 <h3 className={detail['title']}>
-                    {sighting.type === 'person' ? 'Person Sighting' : 'Object Sighting'}
+                    {sighting.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </h3>
                 <button onClick={onClose} className={detail['close-btn']}>✕</button>
             </div>
 
             <div className={detail['meta']}>
-                <span className={detail['tag']}>{sighting.type.toUpperCase()}</span>
+                <span className={`${detail['tag']} ${isPerson ? detail['tag--person'] : detail['tag--object']}`}>
+                    {isPerson ? 'PERSON' : 'OBJECT'}
+                </span>
                 <span className={detail['date']}>{formattedDate}</span>
             </div>
 
@@ -33,7 +37,7 @@ export const SightingDetails = ({ sighting, onClose }: SightingDetailsType) => {
             <div className={detail['section']}>
                 <h4>Details</h4>
                 <ul className={detail['details-list']}>
-                    {sighting.type === 'person' ? (
+                    {isPerson ? (
                         <>
                             <li><strong>Height:</strong> <span className={detail['capitalize']}>{sighting.details.height}</span></li>
                             <li><strong>Hair Color:</strong> {sighting.details.hair_color}</li>

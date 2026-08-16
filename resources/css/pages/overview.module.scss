@@ -39,6 +39,69 @@
     }
 }
 
+.insights-section {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: rgba($clr-gray-50, 0.5);
+    border-radius: $rad-sm;
+    border: 1px solid $clr-gray-300;
+}
+
+.section-title {
+    font-size: $fs-base;
+    color: $txt-muted;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.insight-card {
+    background: $bg-card;
+    padding: 1rem;
+    border-radius: $rad-xs;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-left: 3px solid $color-intermediate;
+
+    &__header {
+        margin-bottom: 0.5rem;
+    }
+
+    .insight-age-label {
+        font-size: $fs-xs;
+        font-weight: $fw-bold;
+        color: $txt-muted;
+    }
+
+    &__body {
+        p {
+            font-size: $fs-sm;
+            margin: 0;
+            color: $clr-gray-500;
+        }
+
+        strong {
+            display: block;
+            font-size: $fs-base;
+            color: $txt-dark;
+            margin: 2px 0;
+        }
+
+        small {
+            font-size: $fs-xs;
+            color: $color-intermediate;
+            font-weight: $fw-semibold;
+        }
+    }
+}
+
 .filter-bar {
     display: flex;
     gap: 1rem;

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'username', 'email', 'password', 'home_latitude', 'home_longitude', 'radius_km'])]
+#[Fillable(['name', 'username', 'birth_year', 'email', 'password', 'home_latitude', 'home_longitude', 'radius_km'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -30,6 +30,7 @@ class User extends Authenticatable
             'home_latitude' => 'float',
             'home_longitude' => 'float',
             'radius_km' => 'integer',
+            'birth_year' => 'integer',
         ];
     }
 

@@ -15,7 +15,16 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 11, 8);
-            $table->enum('type', ['person', 'other']);
+            // Granular microlabels replacing the generic person/other
+            $table->enum('type', [
+                'suspicious_person',
+                'loitering_youth',
+                'trespassing',
+                'suspicious_vehicle',
+                'vandalism',
+                'theft_risk',
+                'other'
+            ]);
             $table->string('short_description');
             $table->jsonb('details');
             $table->timestamps();

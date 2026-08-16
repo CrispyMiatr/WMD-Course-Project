@@ -2,7 +2,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { Layout } from '~/Components';
-import type { ProfilePageType } from '~/types';
+import { isPersonSighting, type ProfilePageType } from '~/types';
 import styles from '~styles/pages/profile.module.scss';
 import 'leaflet/dist/leaflet.css';
 
@@ -27,6 +27,7 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
         name: user.name,
         username: user.username || '',
         email: user.email,
+        birth_year: user.birth_year || '',
         home_latitude: user.home_latitude ?? null,
         home_longitude: user.home_longitude ?? null,
         radius_km: user.radius_km ?? 5,
@@ -135,6 +136,16 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
                             {profileForm.errors.email && <span className={styles['error']}>{profileForm.errors.email}</span>}
                         </div>
 
+                        <div className={styles['form-group']}>
+                            <label>Birth Year</label>
+                            <input
+                                type="number"
+                                value={profileForm.data.birth_year}
+                                onChange={e => profileForm.setData('email', e.target.value)}
+                            />
+                            {profileForm.errors.birth_year && <span className={styles['error']}>{profileForm.errors.birth_year}</span>}
+                        </div>
+
                         <div className="flex items-center gap-4">
                             <button type="submit" disabled={profileForm.processing} className={styles['btn-save']}>Save</button>
                             {status === 'profile-updated' && <span className={styles['success-msg']}>Saved.</span>}
@@ -220,9 +231,11 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
                                 <li key={s.id}>
                                     <div>
                                         <div className={styles['log-type']}>
-                                            {s.type === 'person' ? 'Person' : 'Object'}
+                                            {isPersonSighting(s) ? 'Person' : 'Object'}
                                         </div>
-                                        <div style={{ fontSize: '0.875rem' }}>{s.short_description}</div>
+                                        <div style={{ fontSize: '0.875rem' }}>
+                                            <strong>{s.type.replace('_', ' ')}:</strong> {s.short_description}
+                                        </div>
                                     </div>
                                     <span className={styles['log-date']}>
                                         {new Date(s.created_at).toLocaleDateString('en-GB')}

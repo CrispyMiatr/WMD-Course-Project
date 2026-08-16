@@ -43,6 +43,7 @@ class ProfileController extends Controller
             'home_latitude' => ['nullable', 'numeric'],
             'home_longitude' => ['nullable', 'numeric'],
             'radius_km' => ['nullable', 'integer', 'min:1', 'max:50'],
+            'birth_year' => ['required', 'integer', 'min:1920', 'max:' . date('Y')],
         ]);
 
         $request->user()->fill($request->all());

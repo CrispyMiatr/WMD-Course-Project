@@ -7,14 +7,20 @@ export const SightingForm = ({ lat, lng, recentTracks, onSuccess }: SightingForm
     const { data, setData, post, processing, errors, reset } = useForm({
         latitude: lat,
         longitude: lng,
-        type: 'person' as 'person' | 'other',
+        type: 'suspicious_person',
         short_description: '',
         details: {
             hair_color: '', headwear: '', shirt: '', pants: '', shoes: '', height: '',
-            entity_type: 'car', general_color: '', accent_colors: ''
+            entity_type: '', general_color: '', accent_colors: ''
         } as any,
         track_id: '',
     });
+
+    const isPersonType = [
+        'suspicious_person',
+        'loitering_youth',
+        'trespassing'
+    ].includes(data.type);
 
     // Update form state if map pin moves
     useEffect(() => {
@@ -89,10 +95,19 @@ export const SightingForm = ({ lat, lng, recentTracks, onSuccess }: SightingForm
             <hr style={{ margin: '0.25rem 0', border: '0', borderTop: '1px solid #eee' }} />
 
             <div className={form['form__group']}>
-                <label>Type of Sighting</label>
-                <select value={data.type} onChange={e => setData('type', e.target.value as 'person' | 'other')}>
-                    <option value="person">Person</option>
-                    <option value="other">Other (Car, Drone, Dog, etc.)</option>
+                <label>What are you reporting?</label>
+                <select value={data.type} onChange={e => setData('type', e.target.value)}>
+                    <optgroup label="People">
+                        <option value="suspicious_person">Suspicious Person</option>
+                        <option value="loitering_youth">Loitering Youth</option>
+                        <option value="trespassing">Trespassing</option>
+                    </optgroup>
+                    <optgroup label="Objects / Activity">
+                        <option value="suspicious_vehicle">Suspicious Vehicle</option>
+                        <option value="vandalism">Vandalism / Graffiti</option>
+                        <option value="theft_risk">Theft Risk (Open Property)</option>
+                        <option value="other">Other</option>
+                    </optgroup>
                 </select>
             </div>
 
@@ -106,7 +121,7 @@ export const SightingForm = ({ lat, lng, recentTracks, onSuccess }: SightingForm
                 {errors.short_description && <span className={form['error']}>{errors.short_description}</span>}
             </div>
 
-            {data.type === 'person' ? (
+            {isPersonType ? (
                 <>
                     <div className={form['form__group']}>
                         <label>Height *</label>

@@ -21,4 +21,8 @@ export interface OverviewPageType {
         search?: string;
         type?: string;
     };
+    insights: Record<string, Array<{
+        type: string;
+        count: number;
+    }>>;
 }

@@ -34,10 +34,14 @@ class StoreSightingRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Define which types are "person-based" for validation logic
+        $personTypes = ['suspicious_person', 'loitering_youth', 'trespassing'];
+        $isPerson = in_array($this->type, $personTypes);
+
         return [
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
-            'type' => ['required', 'in:person,other'],
+            'latitude' => ['required', 'numeric'],
+            'longitude' => ['required', 'numeric'],
+            'type' => ['required', 'in:suspicious_person,loitering_youth,trespassing,suspicious_vehicle,vandalism,theft_risk,other'],
             'short_description' => [
                 'required',
                 'string',
@@ -46,18 +50,16 @@ class StoreSightingRequest extends FormRequest
                 'regex:/[a-zA-Z]/'
             ],
 
-            // Person specific fields
-            'details.hair_color' => ['required_if:type,person', 'nullable', 'string', 'max:50'],
-            'details.headwear' => ['nullable', 'string', 'max:50'],
-            'details.shirt' => ['nullable', 'string', 'max:50'],
-            'details.pants' => ['nullable', 'string', 'max:50'],
-            'details.shoes' => ['nullable', 'string', 'max:50'],
-            'details.height' => ['required_if:type,person', 'nullable', 'in:short,middle,tall'],
+            // Validate person details ONLY if type is a person-based microlabel
+            'details.hair_color' => [$isPerson ? 'required' : 'nullable', 'string', 'max:50'],
+            'details.height' => [$isPerson ? 'required' : 'nullable', 'in:short,middle,tall'],
+            'details.headwear' => ['nullable', 'string'],
+            'details.shirt' => ['nullable', 'string'],
+            'details.pants' => ['nullable', 'string'],
 
-            // Other specific fields
-            'details.entity_type' => ['required_if:type,other', 'nullable', 'string', 'max:50'],
-            'details.general_color' => ['required_if:type,other', 'nullable', 'string', 'max:50'],
-            'details.accent_colors' => ['nullable', 'string', 'max:100'],
+            // Validate object details ONLY if type is NOT a person-based microlabel
+            'details.entity_type' => [!$isPerson ? 'required' : 'nullable', 'string', 'max:50'],
+            'details.general_color' => [!$isPerson ? 'required' : 'nullable', 'string', 'max:50'],
         ];
     }
 

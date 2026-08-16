@@ -1,10 +1,10 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Layout } from '~/Components';
-import { OverviewPageType } from '~/types';
+import { isPersonSighting, OverviewPageType } from '~/types';
 import styles from '~styles/pages/overview.module.scss';
 import { useState } from 'react';
 
-const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
+const Overview = ({ sightings, stats, filters, insights }: OverviewPageType) => {
     const [search, setSearch] = useState(filters.search || '');
     const [type, setType] = useState(filters.type || 'all');
 
@@ -48,6 +48,26 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                 </div>
             </div>
 
+            {Object.keys(insights).length > 0 && (
+                <section className={styles['insights-section']}>
+                    <h2 className={styles['section-title']}>Community Watch Patterns</h2>
+                    <div className={styles['insights-grid']}>
+                        {Object.entries(insights).map(([ageGroup, patterns]) => (
+                            <div key={ageGroup} className={styles['insight-card']}>
+                                <div className={styles['insight-card__header']}>
+                                    <span className={styles['insight-age-label']}>Demographic: {ageGroup}</span>
+                                </div>
+                                <div className={styles['insight-card__body']}>
+                                    <p>Primary Concern:</p>
+                                    <strong>{patterns[0].type.replace('_', ' ').toUpperCase()}</strong>
+                                    <small>{patterns[0].count} recent logs</small>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
             <div className={styles['filter-bar']}>
                 <input
                     type="text"
@@ -67,31 +87,42 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                 {sightings.data.length === 0 ? (
                     <p>No sightings found in this neighborhood.</p>
                 ) : (
-                    sightings.data.map(s => (
-                        <div key={s.id} className={`${styles['sighting-card']} ${s.type === 'person' ? styles['sighting-card--person'] : ''}`}>
-                            <div className={styles['sighting-card__info']}>
-                                <div className={styles['sighting-card__badge-row']}>
-                                    <h3>{s.type === 'person' ? 'Person' : (s.details as any).entity_type}</h3>
-                                    <span className={styles['location-badge']}>{s.location_name || 'Area Unknown'}</span>
-                                </div>
-                                <p>{s.short_description}</p>
-                                <small className={styles['reporter-info']}>
-                                    Reported by {s.user?.username || s.user?.name}
+                    sightings.data.map(s => {
+                        const isPerson = isPersonSighting(s);
 
-                                    {s.user?.rank && (
-                                        <span className={`${styles['rank-badge']} ${styles[`rank-badge--${s.user.rank.level}`]}`}>
-                                            {s.user.rank.label}
+                        return (
+                            <div key={s.id} className={`${styles['sighting-card']} ${isPerson ? styles['sighting-card--person'] : ''}`}>
+                                <div className={styles['sighting-card__info']}>
+                                    <div className={styles['sighting-card__badge-row']}>
+                                        <h3>
+                                            {isPerson
+                                                ? 'Person'
+                                                : (s as any).details.entity_type || 'Object'}
+                                        </h3>
+                                        <span className={styles['microlabel-tag']}>
+                                            {s.type.replace('_', ' ')}
                                         </span>
-                                    )}
+                                        <span className={styles['location-badge']}>{s.location_name || 'Area Unknown'}</span>
+                                    </div>
+                                    <p>{s.short_description}</p>
+                                    <small className={styles['reporter-info']}>
+                                        Reported by {s.user?.username || s.user?.name}
 
-                                    <span className={styles['report-date']}>
-                                        • {new Date(s.created_at).toLocaleDateString('en-GB')}
-                                    </span>
-                                </small>
+                                        {s.user?.rank && (
+                                            <span className={`${styles['rank-badge']} ${styles[`rank-badge--${s.user.rank.level}`]}`}>
+                                                {s.user.rank.label}
+                                            </span>
+                                        )}
+
+                                        <span className={styles['report-date']}>
+                                            • {new Date(s.created_at).toLocaleDateString('en-GB')}
+                                        </span>
+                                    </small>
+                                </div>
+                                <Link href={route('map.index')} className="nav-button">Map</Link>
                             </div>
-                            <Link href={route('map.index')} className="nav-button">Map</Link>
-                        </div>
-                    ))
+                        )
+                    })
                 )}
             </div>
 

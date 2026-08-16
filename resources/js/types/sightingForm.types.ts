@@ -25,6 +25,10 @@ export interface OtherDetailsType {
 }
 
 // Sighting base
+export type PersonMicrolabel = 'suspicious_person' | 'loitering_youth' | 'trespassing';
+export type ObjectMicrolabel = 'suspicious_vehicle' | 'vandalism' | 'theft_risk' | 'other';
+export type SightingMicrolabel = PersonMicrolabel | ObjectMicrolabel;
+
 export interface BaseSightingType {
     id: number;
     user_id: number;
@@ -37,17 +41,25 @@ export interface BaseSightingType {
     user?: UserType;
 }
 
-// Person
+// 2. Link specific Microlabels to specific Detail types
 export interface PersonSightingType extends BaseSightingType {
-    type: 'person';
+    type: PersonMicrolabel;
     details: PersonDetailsType;
 }
 
-// Other
 export interface OtherSightingType extends BaseSightingType {
-    type: 'other';
+    type: ObjectMicrolabel;
     details: OtherDetailsType;
 }
 
-// Sighting
 export type SightingType = PersonSightingType | OtherSightingType;
+
+export const PERSON_MICROLABELS: PersonMicrolabel[] = [
+    'suspicious_person',
+    'loitering_youth',
+    'trespassing'
+];
+
+export const isPersonSighting = (sighting: SightingType): sighting is PersonSightingType => {
+    return PERSON_MICROLABELS.includes(sighting.type as PersonMicrolabel);
+};

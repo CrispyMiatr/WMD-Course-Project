@@ -7,6 +7,7 @@ const Register = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         username: '',
+        birth_year: '',
         email: '',
         password: '',
         password_confirmation: '',
@@ -53,6 +54,18 @@ const Register = () => {
                             placeholder="How others will see you"
                         />
                         {errors.username && <span className={styles['error']}>{errors.username}</span>}
+                    </div>
+
+                    <div className={styles['form-group']}>
+                        <label>Birth Year</label>
+                        <input
+                            type="number"
+                            value={data.birth_year}
+                            onChange={(e) => setData('birth_year', e.target.value)}
+                            placeholder="e.g. 1995"
+                            required
+                        />
+                        {errors.birth_year && <span className={styles['error']}>{errors.birth_year}</span>}
                     </div>
 
                     <div className={styles['form-group']}>

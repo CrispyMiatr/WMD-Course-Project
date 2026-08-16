@@ -48,6 +48,18 @@
         border-radius: $rad-full;
         font-weight: $fw-semibold;
         font-size: $fs-xs;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+
+        &--person {
+            background-color: $clr-yellow;
+            color: $txt-black;
+        }
+
+        &--object {
+            background-color: $clr-black;
+            color: $txt-white;
+        }
     }
 
     .date {
