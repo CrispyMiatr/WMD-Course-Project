@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import { SightingType } from '~/types';
+import { isPersonSighting, SightingType } from '~/types';
 import map from '~styles/pages/map.module.scss';
 
 let DefaultIcon = L.icon({
@@ -89,23 +89,39 @@ const Map = ({ status, sightings, recentTracks }: MapPageType) => {
                             );
                         })}
 
-                        {sightings.map(sighting => (
-                            <Marker
-                                key={sighting.id}
-                                position={[sighting.latitude, sighting.longitude]}
-                                eventHandlers={{
-                                    click: () => {
-                                        setNewLocation(null);
-                                        setSelectedSighting(sighting);
-                                    }
-                                }}
-                            >
-                                <Tooltip direction="top" offset={[0, -30]}>
-                                    <strong>{sighting.type === 'person' ? 'Person' : sighting.details.entity_type}</strong>
-                                    <p style={{ margin: '5px 0' }}>{sighting.short_description}</p>
-                                </Tooltip>
-                            </Marker>
-                        ))}
+                        {sightings.map(sighting => {
+                            const isPerson = isPersonSighting(sighting);
+
+                            return (
+                                <Marker
+                                    key={sighting.id}
+                                    position={[sighting.latitude, sighting.longitude]}
+                                    eventHandlers={{
+                                        click: () => {
+                                            setNewLocation(null);
+                                            setSelectedSighting(sighting);
+                                        }
+                                    }}
+                                >
+                                    <Tooltip direction="top" offset={[0, -30]}>
+                                        <strong>
+                                            {isPerson
+                                                ? 'Person'
+                                                : sighting.details.entity_type
+                                            }
+                                        </strong>
+
+                                        {/* Optional: Add the specific microlabel below the category */}
+                                        <div style={{ fontSize: '0.7rem', color: '#666', textTransform: 'uppercase' }}>
+                                            {sighting.type.replace('_', ' ')}
+                                        </div>
+
+                                        <p style={{ margin: '5px 0' }}>{sighting.short_description}</p>
+                                    </Tooltip>
+                                </Marker>
+                            )
+
+                        })}
 
                         {newLocation && (
                             <Marker position={[newLocation.lat, newLocation.lng]}>
