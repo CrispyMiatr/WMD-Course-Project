@@ -33,9 +33,29 @@ class User extends Authenticatable
         ];
     }
 
+    protected $appends = ['rank'];
+
     public function sightings()
     {
         return $this->hasMany(Sighting::class);
+    }
+
+    /**
+     * Determine the user's rank based on activity in the last 7 days
+     */
+    public function getRankAttribute(): array
+    {
+        $count = $this->sightings()->where('created_at', '>=', now()->subWeek())->count();
+
+        if ($count >= 15) {
+            return ['label' => 'Very Observant', 'level' => 'expert', 'color' => '#7946d0']; // purple
+        } elseif ($count >= 5) {
+            return ['label' => 'Active Observer', 'level' => 'intermediate', 'color' => '#3F88C5']; // blue
+        } elseif ($count >= 1) {
+            return ['label' => 'New Contributor', 'level' => 'newbie', 'color' => '#60935D']; // green
+        }
+
+        return ['label' => 'Inactive', 'level' => 'inactive', 'color' => '#797979']; // grey
     }
 
     public function getNeighborhoodStats()

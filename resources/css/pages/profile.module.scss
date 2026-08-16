@@ -122,6 +122,23 @@
   }
 }
 
+.rank-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 2px 0;
+  border-radius: $rad-sm;
+  color: $txt-white;
+  font-weight: bold;
+  font-size: $fs-sm;
+  text-transform: uppercase;
+}
+
+.rank-subtext {
+  font-size: $fs-xs;
+  color: $clr-gray-700;
+  margin-top: 4px;
+}
+
 .threat-banner {
   @include threat-banner;
 }

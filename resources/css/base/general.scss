@@ -21,6 +21,7 @@ $clr-red: #E94F37;
 $clr-yellow: #FAD069;
 $clr-green: #60935D;
 $clr-blue: #3F88C5;
+$clr-purple: #7946d0;
 
 $clr-black: #141414;
 $clr-white: #FFFFFF;
@@ -38,11 +39,16 @@ $clr-gray-50: #EEEEEE;
 
 $sh-card: rgba(0, 0, 0, 0.1);
 
-// Brand / Palette
+// Palette
 $color-primary: $clr-black;
 $color-accent: $clr-blue;
 $color-yes: $clr-green;
 $color-no: $clr-red;
+
+$color-expert: $clr-purple;
+$color-intermediate: $clr-blue;
+$color-newbie: $clr-green;
+$color-inactive: $clr-gray-600;
 
 // Background
 $bg-body: $clr-white-b;
@@ -78,6 +84,7 @@ $fs-base: 1rem; // 16px
 $fs-sm: 0.875rem; // 14px
 $fs-nav: 0.813rem; // 13px
 $fs-xs: 0.75rem; // 12px
+$fs-2xs: 0.625rem; // 10px
 
 // --- Borders & Radius ---
 $rad-xl: 1.5rem; // 24px

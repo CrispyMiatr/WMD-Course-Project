@@ -38,7 +38,13 @@ class StoreSightingRequest extends FormRequest
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'type' => ['required', 'in:person,other'],
-            'short_description' => ['required', 'string', 'max:255'],
+            'short_description' => [
+                'required',
+                'string',
+                'min:10',
+                'max:255',
+                'regex:/[a-zA-Z]/'
+            ],
 
             // Person specific fields
             'details.hair_color' => ['required_if:type,person', 'nullable', 'string', 'max:50'],
@@ -52,6 +58,17 @@ class StoreSightingRequest extends FormRequest
             'details.entity_type' => ['required_if:type,other', 'nullable', 'string', 'max:50'],
             'details.general_color' => ['required_if:type,other', 'nullable', 'string', 'max:50'],
             'details.accent_colors' => ['nullable', 'string', 'max:100'],
+        ];
+    }
+
+    /**
+     * Error messages if requirements not met
+     */
+    public function messages(): array
+    {
+        return [
+            'short_description.min' => 'Please provide a more detailed description (min 10 chars).',
+            'short_description.regex' => 'The description must contain actual text.',
         ];
     }
 }

@@ -75,14 +75,18 @@ const Overview = ({ sightings, stats, filters }: OverviewPageType) => {
                                     <span className={styles['location-badge']}>{s.location_name || 'Area Unknown'}</span>
                                 </div>
                                 <p>{s.short_description}</p>
-                                <small>
-                                    Reported by {s.user?.username || s.user?.name} • {
-                                        new Date(s.created_at).toLocaleDateString('en-GB', {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric'
-                                        }).replace(/\//g, '-')
-                                    }
+                                <small className={styles['reporter-info']}>
+                                    Reported by {s.user?.username || s.user?.name}
+
+                                    {s.user?.rank && (
+                                        <span className={`${styles['rank-badge']} ${styles[`rank-badge--${s.user.rank.level}`]}`}>
+                                            {s.user.rank.label}
+                                        </span>
+                                    )}
+
+                                    <span className={styles['report-date']}>
+                                        • {new Date(s.created_at).toLocaleDateString('en-GB')}
+                                    </span>
                                 </small>
                             </div>
                             <Link href={route('map.index')} className="nav-button">Map</Link>

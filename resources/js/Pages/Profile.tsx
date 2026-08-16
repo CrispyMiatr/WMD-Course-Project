@@ -60,6 +60,21 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
 
             <div className={styles['left-col']}>
                 <section className={styles['section']}>
+                    <h2>{user.name}</h2>
+                    <div className={styles['badge-container']}>
+                        <span
+                            className={styles['rank-badge']}
+                            style={{ backgroundColor: user.rank.color }}
+                        >
+                            {user.rank.label}
+                        </span>
+                        <p className={styles['rank-subtext']}>
+                            Based on your activity this week.
+                        </p>
+                    </div>
+                </section>
+
+                <section className={styles['section']}>
                     <div className={styles['section__header']}>
                         <h3>Home Location & Safety Radius</h3>
                         <p>Set your home to receive personalized neighborhood security alerts.</p>

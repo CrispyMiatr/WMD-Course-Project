@@ -1,3 +1,5 @@
+import { UserType } from "./user.types";
+
 export interface SightingFormType {
     lat: number;
     lng: number;
@@ -32,11 +34,7 @@ export interface BaseSightingType {
     short_description: string;
     track_id: string | null;
     created_at: string;
-    user?: {
-        id: number;
-        name: string;
-        username: string | null;
-    };
+    user?: UserType;
 }
 
 // Person
