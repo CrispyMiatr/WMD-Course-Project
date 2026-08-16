@@ -12,77 +12,67 @@ class OverviewController extends Controller
     {
         $user = $request->user();
 
-        // Filtering + searching
+        // 1. Define the sets clearly
+        $personMicrolabels = ['suspicious_person', 'loitering_youth', 'trespassing'];
+
+        // Create the base query
         $query = Sighting::query()->with('user:id,name,username');
 
-        if ($request->search) {
+        // 2. Handle Search
+        if ($request->filled('search')) {
             $query->where('short_description', 'ilike', '%' . $request->search . '%');
         }
 
-        if ($request->type && $request->type !== 'all') {
-            $query->where('type', $request->type);
+        // 3. Handle Filtering (The Fix)
+        if ($request->filled('type') && $request->type !== 'all') {
+            if ($request->type === 'person') {
+                // "All People" selected
+                $query->whereIn('type', $personMicrolabels);
+            } elseif ($request->type === 'other') {
+                // "All Objects" selected (everything NOT in the person list)
+                $query->whereNotIn('type', $personMicrolabels);
+            } else {
+                // Specific microlabel selected (e.g., 'vandalism')
+                $query->where('type', $request->type);
+            }
         }
 
-        $recentCount = Sighting::where('created_at', '>=', now()->subHours(48))->count();
+        // 4. Calculate Stats (Use separate queries to avoid filter interference)
+        $baseStats = [
+            'total' => Sighting::count(),
+            'people' => Sighting::whereIn('type', $personMicrolabels)->count(),
+            'objects' => Sighting::whereNotIn('type', $personMicrolabels)->count(),
+        ];
 
-        $threatLevel = 'Low';
-        $uiTheme = 'success'; // Green
-
-        if ($recentCount > 15) {
-            $threatLevel = 'Critical';
-            $uiTheme = 'danger'; // Red
-        } elseif ($recentCount > 5) {
-            $threatLevel = 'Elevated';
-            $uiTheme = 'warning'; // Yellow
-        }
-
-        // Data aggregation for visuals -> personal vs global stats
+        // 5. Neighborhood/Personalized Stats
         if ($user && $user->home_latitude && $user->home_longitude) {
             $statsData = $user->getNeighborhoodStats();
-
-            $stats = [
-                'total' => Sighting::count(),
-                'people' => Sighting::where('type', 'person')->count(),
-                'objects' => Sighting::where('type', 'other')->count(),
+            $stats = array_merge($baseStats, [
                 'recent' => $statsData['recent'],
                 'threatLevel' => $statsData['threatLevel'],
                 'uiTheme' => $statsData['uiTheme'],
+                'radius' => $statsData['radius'],
                 'is_personalized' => true,
-                'radius' => $statsData['radius']
-            ];
+            ]);
         } else {
-            // Fallback -> global stats
             $recentCount = Sighting::where('created_at', '>=', now()->subHours(48))->count();
-
-            $threatLevel = 'Low';
-            $uiTheme = 'success';
-            if ($recentCount > 15) {
-                $threatLevel = 'Critical';
-                $uiTheme = 'danger';
-            } elseif ($recentCount > 5) {
-                $threatLevel = 'Elevated';
-                $uiTheme = 'warning';
-            }
-
-            $stats = [
-                'total' => Sighting::count(),
-                'people' => Sighting::where('type', 'person')->count(),
-                'objects' => Sighting::where('type', 'other')->count(),
+            $stats = array_merge($baseStats, [
                 'recent' => $recentCount,
-                'threatLevel' => $threatLevel,
-                'uiTheme' => $uiTheme,
+                'threatLevel' => $recentCount > 15 ? 'Critical' : ($recentCount > 5 ? 'Elevated' : 'Low'),
+                'uiTheme' => $recentCount > 15 ? 'danger' : ($recentCount > 5 ? 'warning' : 'success'),
                 'is_personalized' => false
-            ];
+            ]);
         }
 
+        // 6. Insights Query (Grouped by age and type)
         $insights = \DB::table('sightings')
             ->join('users', 'sightings.user_id', '=', 'users.id')
             ->select([
                 \DB::raw("CASE 
-                WHEN (2024 - users.birth_year) < 20 THEN 'Under 20'
-                WHEN (2024 - users.birth_year) BETWEEN 20 AND 35 THEN '20-35'
-                WHEN (2024 - users.birth_year) BETWEEN 36 AND 55 THEN '36-55'
-                ELSE '55+'
+                WHEN (2024 - users.birth_year) < 25 THEN 'Gen Z / Youth'
+                WHEN (2024 - users.birth_year) BETWEEN 25 AND 45 THEN 'Millennials / Adults'
+                WHEN (2024 - users.birth_year) > 45 THEN 'Seniors'
+                ELSE 'Unknown'
             END as age_group"),
                 'sightings.type',
                 \DB::raw('count(*) as count')

@@ -10,10 +10,16 @@ const Overview = ({ sightings, stats, filters, insights }: OverviewPageType) => 
 
     // Handle searching with a small delay or via button
     const handleFilter = () => {
-        router.get(route('overview.index'), { search, type }, {
-            preserveState: true,
-            replace: true
-        });
+        router.get(route('overview.index'),
+            {
+                search: search || undefined, // Send undefined if empty to keep URL clean
+                type: type !== 'all' ? type : undefined
+            },
+            {
+                preserveState: true,
+                replace: true
+            }
+        );
     };
 
     const bannerClass = stats.uiTheme ? styles[`threat-banner--${stats.uiTheme}`] : '';
@@ -76,9 +82,19 @@ const Overview = ({ sightings, stats, filters, insights }: OverviewPageType) => 
                     onChange={e => setSearch(e.target.value)}
                 />
                 <select value={type} onChange={e => setType(e.target.value)}>
-                    <option value="all">All Types</option>
-                    <option value="person">Person</option>
-                    <option value="other">Other</option>
+                    <option value="all">All Logs</option>
+                    <optgroup label="General Categories">
+                        <option value="person">All People</option>
+                        <option value="other">All Objects</option>
+                    </optgroup>
+                    <optgroup label="Specific Microlabels">
+                        <option value="suspicious_person">Suspicious Person</option>
+                        <option value="loitering_youth">Loitering Youth</option>
+                        <option value="trespassing">Trespassing</option>
+                        <option value="suspicious_vehicle">Suspicious Vehicle</option>
+                        <option value="vandalism">Vandalism</option>
+                        <option value="theft_risk">Theft Risk</option>
+                    </optgroup>
                 </select>
                 <button onClick={handleFilter} className="nav-button-primary">Apply</button>
             </div>
