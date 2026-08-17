@@ -141,7 +141,8 @@ const Profile = ({ auth, status, sightings, stats }: ProfilePageType) => {
                             <input
                                 type="number"
                                 value={profileForm.data.birth_year}
-                                onChange={e => profileForm.setData('email', e.target.value)}
+                                onChange={e => profileForm.setData('birth_year', e.target.value)}
+                                required
                             />
                             {profileForm.errors.birth_year && <span className={styles['error']}>{profileForm.errors.birth_year}</span>}
                         </div>
