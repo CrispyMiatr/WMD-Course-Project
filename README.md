@@ -6,7 +6,7 @@ WatchLog is a web-based surveillance simulation platform designed for neighborho
 
 ## Tech stack
 
--   **Backend:** Laravel 11 (PHP 8.2+)
+-   **Backend:** Laravel 11 (PHP 8.3)
 -   **Database:** PostgreSQL (with JSONB and UUID support)
 -   **Frontend:** React (TypeScript) via Inertia.js
 -   **Styling:** SCSS (CSS Modules)
