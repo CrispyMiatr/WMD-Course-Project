@@ -73,10 +73,10 @@ class DatabaseSeeder extends Seeder
             'created_at' => now()->subHours(12)
         ]);
 
-        // 5. General "Noise" for the map
+        // General "Noise" for the map
         Sighting::factory()->count(25)->create();
 
-        // 6. Test User's personal logs (so the Profile page isn't empty)
+        // Demo User's personal logs (so the Profile page isn't empty)
         Sighting::factory()->count(4)->create([
             'user_id' => $testUser->id,
             'location_name' => 'Close to My Residence',
