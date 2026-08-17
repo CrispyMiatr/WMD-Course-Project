@@ -8,7 +8,6 @@ const Overview = ({ sightings, stats, filters, insights }: OverviewPageType) => 
     const [search, setSearch] = useState(filters.search || '');
     const [type, setType] = useState(filters.type || 'all');
 
-    // Handle searching with a small delay or via button
     const handleFilter = () => {
         router.get(route('overview.index'),
             {

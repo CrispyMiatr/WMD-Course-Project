@@ -8,7 +8,7 @@ declare global {
     var route: typeof ziggyRoute;
 }
 
-// This is necessary for Vite to recognize the env/glob types
+// Necessary for Vite to recognize the env/glob types
 interface ImportMeta {
     readonly env: ImportMetaEnv;
     readonly glob: any;

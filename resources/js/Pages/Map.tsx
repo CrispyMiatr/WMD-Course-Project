@@ -35,7 +35,7 @@ const MapClickHandler = ({
     return null;
 };
 
-const Map = ({ status, sightings, recentTracks }: MapPageType) => {
+const Map = ({ sightings, recentTracks }: MapPageType) => {
     const { auth } = usePage().props as any;
     const [newLocation, setNewLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [selectedSighting, setSelectedSighting] = useState<SightingType | null>(null);
@@ -111,7 +111,6 @@ const Map = ({ status, sightings, recentTracks }: MapPageType) => {
                                             }
                                         </strong>
 
-                                        {/* Optional: Add the specific microlabel below the category */}
                                         <div style={{ fontSize: '0.7rem', color: '#666', textTransform: 'uppercase' }}>
                                             {sighting.type.replace('_', ' ')}
                                         </div>

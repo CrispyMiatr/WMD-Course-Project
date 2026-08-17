@@ -41,7 +41,7 @@ export interface BaseSightingType {
     user?: UserType;
 }
 
-// 2. Link specific Microlabels to specific Detail types
+// Link specific Microlabels to specific Detail types
 export interface PersonSightingType extends BaseSightingType {
     type: PersonMicrolabel;
     details: PersonDetailsType;
