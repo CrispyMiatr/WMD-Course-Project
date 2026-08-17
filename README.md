@@ -4,7 +4,7 @@
 
 WatchLog is a web-based surveillance simulation platform designed for neighborhood inhabitants to log sightings, track suspicious movements, and analyse community security trends.
 
-## Tech Stack
+## Tech stack
 
 -   **Backend:** Laravel 11 (PHP 8.2+)
 -   **Database:** PostgreSQL (with JSONB and UUID support)
@@ -24,37 +24,48 @@ Make sure you have the following installed:
 -   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 -   Git
 
-### 2. Clone the Repository
+### 2. Clone the repository
 ```bash
 git clone https://github.com/CrispyMiatr/WMD-Course-Project
 cd WMD-Course-Project
 ```
 
-### 3. Environment Configuration
+### 3. Environment configuration
 Copy the example environment file:
 ```bash
 cp .env.example .env
 ```
-*Note: The default `.env.example` is pre-configured for the Docker PostgreSQL container.*
+*Note for Linux users: To avoid permission issues, ensure your .env contains WWWUSER=1000 and WWWGROUP=1000 (or your specific UID/GID).*
 
-### 4. Build and Start the Containers
-Run the following command to build the images and start the services:
+### 4. Build and start the containers
+First, bootstrap the project to install the initial dependencies:
 ```bash
-docker compose up --build -d
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
+```
+Then, build the images and start the services:
+```bash
+docker compose up -d --build
+```
+*You will need to wait a few moments for the PostgreSQL database to initialize before proceeding.*
+
+### 5. Initialise application & database
+Run these commands to set up the encryption key, folder permissions, and database tables:
+```bash
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail shell -c "chmod -R 775 storage bootstrap/cache"
+./vendor/bin/sail artisan migrate:fresh --seed
+
 ```
 
-### 5. Install Dependencies & Migrate
-Enter the PHP container to install dependencies and set up the database:
+### 6. Compile frontend assets
+In a terminal window, install the Node dependencies and start the Vite dev server:
 ```bash
-docker compose exec laravel.test composer install
-docker compose exec laravel.test php artisan key:generate
-docker compose exec laravel.test php artisan migrate --seed
-```
-
-### 6. Compile Frontend Assets
-In a new terminal window:
-```bash
-./vendor/bin/sail npm install
+./vendor/bin/sail npm install --legacy-peer-deps
 ./vendor/bin/sail npm run dev
 ```
 
@@ -62,7 +73,13 @@ The application will be available at **`http://localhost`**.
 
 > [!NOTE]
 > ### Troubleshooting
-> If you receive a "command not found" error for `npm` or `php`, ensure you are prefixing the commands with `./vendor/bin/sail`. This ensures the project uses the versions provided by the Docker environment.
+> #### "Permission Denied" errors
+> If you see an error stating that laravel.log or a folder in storage cannot be opened, run:
+> ```bash
+> ./vendor/bin/sail shell -c "chmod -R 775 storage bootstrap/cache"
+> ```
+> #### Command not found
+> If you receive a "command not found" error for npm or php, make sure you are prefixing the commands with ./vendor/bin/sail. The project uses the specific versions provided inside the Docker containers.
 
 
 ### 7. Testing
