@@ -1,4 +1,6 @@
-# WatchLog: Neighborhood Surveillance Simulation
+# WatchLog
+
+## Neighborhood Surveillance Simulation
 
 WatchLog is a web-based surveillance simulation platform designed for neighborhood inhabitants to log sightings, track suspicious movements, and analyse community security trends.
 
