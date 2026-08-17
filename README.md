@@ -98,6 +98,10 @@ Demo credentials are:
 
 ## Attribution & Documentation
 
+### Demo Video
+
+[Here is a link](https://youtu.be/tPNvnTtjK4M) to a short demo video about how the app works.
+
 ### Core Frameworks, Libraries, etc.
 - [Laravel](https://laravel.com/docs/13.x/readme) - Backend logic & API
 - [Inertia.js](https://inertiajs.com/docs/v3/getting-started/index) - The bridge between Larevel & React
