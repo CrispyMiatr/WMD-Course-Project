@@ -113,7 +113,7 @@ Demo credentials are:
 ### External sources
 - [Leaflet](https://leafletjs.com/reference.html) - Open-source JavaScript library for interactive maps
 - [Leaflet.heat](https://github.com/Leaflet/Leaflet.heat) - Leaflet heatmap plugin
-- [react-leaflet](https://github.com/PaulLeCam/react-leaflet) - React components for Leaflet maps
+- [react-leaflet](https://react-leaflet.js.org/) - React components for Leaflet maps
 
 ### Gemini
 Gemeni was used to assist with the development of this project. It was used to help me get started and figure out core logic of functionalities.
